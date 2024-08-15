@@ -4,9 +4,15 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/flowbite/**/*.js",
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'serif': ['Merriweather', 'ui-serif', 'Georgia', 'serif'],
+        'mono': ['Fira Code', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -14,5 +20,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 };

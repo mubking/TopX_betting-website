@@ -8,6 +8,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -16,14 +20,35 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.nav-link {
+  @apply h-[2px] relative transition duration-500 ease-linear after:absolute after:bottom-0 after:bg-[#7879F1] after:transition-transform after:scale-x-0 after:h-1 md:after:w-full after:w-[90px] after:left-0 hover:after:scale-x-[1] hover:after:bg-[#7879F1];
+}
+.active {
+  @apply h-full text-white mt-[24px] relative transition duration-500 ease-linear after:absolute after:bottom-[-115%] after:bg-[#7879f1] after:transition-transform after:h-1 md:after:w-full after:w-[90px] after:left-0 after:scale-x-[1];
+}
+.toggle div {
+  background-color: #9C9EF6;
+  height: 2px;
+  width: 25px;
+  transition: all 0.4s ease;
+  margin-top: 5px 0;
+}
+
+.toggle.open .first {
+  transform: rotate(-45deg) translate(1px, 11px);
+  margin-right: 15px;
+}
+
+.toggle.open .second {
+  opacity: 0;
+}
+
+.toggle.open .third {
+  transform: rotate(45deg) translate(1px, -11px);
+  margin-right: 15px;
+}
+.toggle {
+  @apply bg-transparent flex cursor-pointer min-w-[40px] h-[40px] flex-col items-center justify-center gap-[5px]  rounded-[10px];
 }
 
 @layer utilities {
