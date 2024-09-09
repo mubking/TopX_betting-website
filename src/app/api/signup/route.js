@@ -9,6 +9,13 @@ export async function POST(request) {
 
     console.log("Received payload:", payload); // Debugging log
 
+    if (!payload) {
+      return NextResponse.json(
+        { message: "Payload required!" },
+        { status: 400 }
+      );
+    }
+
     if (!username) {
       return NextResponse.json(
         { message: "Username is required" },
@@ -32,7 +39,7 @@ export async function POST(request) {
 
     if (usernameExist) {
       return NextResponse.json(
-        { user: null, message: "User with this Username already exists" },
+        { message: "User with this Username already exists" },
         { status: 400 }
       );
     }
@@ -43,7 +50,7 @@ export async function POST(request) {
 
     if (emailExist) {
       return NextResponse.json(
-        { user: null, message: "User with this email already exists" },
+        { message: "User with this email already exists" },
         { status: 400 }
       );
     }
@@ -61,7 +68,7 @@ export async function POST(request) {
     console.log("New user created:", newUser); // Debugging log
 
     return NextResponse.json(
-      { user: newUser, message: "User Successfully Registered" },
+      { message: "User Successfully Registered" },
       { status: 200 }
     );
   } catch (error) {

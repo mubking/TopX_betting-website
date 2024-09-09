@@ -1,4 +1,4 @@
-import New_Challenges from '@/components/dashboard/New_Challenges'
+import New_Challenges from '../../components/dashboard/New_Challenges'
 import React from 'react'
 
 function page() {

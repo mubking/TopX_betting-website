@@ -1,12 +1,15 @@
 "use client";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { TbUser } from "react-icons/tb";
+import { useRouter } from 'next/navigation';
 
 function DashboardNavbar() {
   const [menu, setMenu] = useState(false);
   const pathName = usePathname();
+  const { data: session } = useSession();
   const toggleMenu = () => {
     setMenu(!menu);
   };
@@ -49,12 +52,18 @@ function DashboardNavbar() {
             </Link>
           ))}
         </div>
-        <div className="md:block hidden">
+        <div className="md:flex items-center gap-2 hidden">
           <button className="flex bg-[#7879F1] py-1 px-5 rounded-xl text-white items-center gap-1">
             <span>
               <TbUser />
             </span>
-            <span>Tosh</span>
+            <span>{session?.user?.username}</span>
+          </button>
+          <button onClick={()=> signOut({
+              redirect: true,
+              callbackUrl: `${window.location.origin}/login`,
+            })} className="flex bg-[#7879F1] py-1 px-5 rounded-xl text-white items-center gap-1">
+            <span>Log out</span>
           </button>
         </div>
         <div className="flex md:hidden items-center gap-2">
@@ -62,8 +71,9 @@ function DashboardNavbar() {
             <span>
               <TbUser />
             </span>
-            <span>Tosh</span>
+            <span>{session?.user?.username}</span>
           </button>
+          
           <button
             onClick={toggleMenu}
             className={` z-[500] ${menu ? "toggle open" : "toggle"}`}

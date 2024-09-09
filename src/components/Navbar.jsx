@@ -7,8 +7,7 @@ function Navbar() {
 
   const handleJoinClick = (e) => {
     e.preventDefault();
-    router.push("/signupss")
-    // Add your form submission logic here
+    router.push("/signup")
   };
 
   return (
@@ -22,6 +21,7 @@ function Navbar() {
     </div>
     <div className='cursor-pointer'>
         <img src="/Logo.png" alt="" style={{height:"10vh"}} />
+          
     </div>
     <div >
       <ul className='flex item-center gap-8 cursor-pointer '>

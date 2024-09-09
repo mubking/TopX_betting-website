@@ -1,12 +1,16 @@
+"use client";
+import { useSession } from "next-auth/react";
 import React from 'react'
 
 function TrendingBets() {
+  const { data: session } = useSession();
+
   return (
     <div className='p-5 w-full'>
-     <div className="flex justify-between">
+     <div className="flex flex-col md:flex-row justify-between">
        <div className='w-full'> 
-      <h1 className='text-2xl'>Hey Tosh,</h1>
-      <h1 className='text-2xl'>Explore the trending bets</h1>
+       <h1 className="text-2xl">Hey {session?.user?.username},</h1>
+       <h1 className='text-2xl'>Explore the trending bets</h1>
       <p className='text-lg mt-3'>There are many possibilities you can achieve with us. Let’s help you gain reward for what you do doing the most!</p></div>
       
        <div className='w-full'></div>

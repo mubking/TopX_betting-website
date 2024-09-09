@@ -1,4 +1,4 @@
-import Fund_wallet from '@/components/dashboard/Fund_Wallet'
+import Fund_wallet from '../../components/dashboard/Fund_Wallet'
 import React from 'react'
 
 function page() {

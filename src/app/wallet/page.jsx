@@ -1,4 +1,4 @@
-import Wallet from '@/components/dashboard/wallet'
+import Wallet from '../../components/dashboard/Wallet'
 import React from 'react'
 
 

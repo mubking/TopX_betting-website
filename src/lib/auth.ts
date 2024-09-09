@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/sign-in", // Your custom sign-in page
+    signIn: "/login", // Your custom sign-in page
   },
   providers: [
     CredentialsProvider({
@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Credentials): Promise<NextAuthUser | null> {
+        console.log(credentials)
         if (!credentials?.username || !credentials?.password) {
           console.error("Username and password are required");
           return null; // Return null if validation fails

@@ -1,40 +1,66 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 function New_Challenges() {
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("09:30");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    title: "",
+    startDate: "",
+    endDate: "",
+    level: "beginners",
+    streamLink: "",
+    amount: "",
+    description: "",
+  });
 
-  // Handle Start Time Change
-  const handleStartTimeChange = (event) => {
-    const newStartTime = event.target.value;
-    setStartTime(newStartTime);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
 
-    // Ensure the end time is not earlier than the start time
-    if (newStartTime >= endTime) {
-      setEndTime(newStartTime);
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    console.log(formData);
+    const currentDateTime = new Date();
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+
+    if (start <= currentDateTime) {
+      toast.error("Start date must be in the future.");
+      return;
     }
-  };
-  const [selectedLevel, setSelectedLevel] = useState("Intermediate");
 
-  const handleSelectChange = (event) => {
-    setSelectedLevel(event.target.value);
-  };
+    // Validation: Check if end date is after the start date
+    if (end <= start) {
+      toast.error("End date must be after the start date.");
+      return;
+    }
 
-  // Handle End Time Change
-  const handleEndTimeChange = (event) => {
-    const newEndTime = event.target.value;
-    setEndTime(newEndTime);
+    const res = await fetch("/api/challenge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-    // Ensure the start time is not later than the end time
-    if (newEndTime <= startTime) {
-      setStartTime(newEndTime);
+    const data = await res.json();
+    const { message } = data;
+    if (res.ok) {
+      toast.success(message);
+      setLoading(false);
+      router.push("/dashboard");
+    } else {
+      toast.error(message);
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen w-full p-5">
-      <div className="w-[30%]">
+      <div className=" w-full md:w-[30%]">
         <h1 className="text-2xl font-bold">
           Are you a pro gamer? Challenge someone today and stand a chance to win
           big bag!
@@ -44,14 +70,14 @@ function New_Challenges() {
           gain reward for what you like doing the most!
         </p>
       </div>
-      <h1 className="text-center text-2xl font-extrabold">
+      <h1 className="text-center text-2xl font-extrabold mt-5">
         Post New Challenge
       </h1>
 
       {/* Challenge Title */}
       <div>
         <label
-          htmlFor="challenge-title"
+          htmlFor="title"
           className="block mb-2 font-extrabold text-xl text-gray-900"
         >
           Challenge title
@@ -59,10 +85,12 @@ function New_Challenges() {
         <div className="flex flex-col">
           <input
             type="text"
-            id="challenge-title"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 font-extrabold text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="No One can win me on call of duty!"
-            required
           />
         </div>
       </div>
@@ -78,9 +106,11 @@ function New_Challenges() {
           <input
             type="text"
             id="amount"
+            name="amount"
+            value={formData.amount}
+            onChange={handleInputChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 font-extrabold text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="2000"
-            required
           />
         </div>
       </div>
@@ -103,14 +133,12 @@ function New_Challenges() {
             </label>
             <div className="relative">
               <input
-                type="time"
-                id="start-time"
-                value={startTime}
-                onChange={handleStartTimeChange}
+                type="datetime-local"
+                id="startDate"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleInputChange}
                 className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                min="09:00"
-                max="18:00"
-                required
               />
             </div>
           </div>
@@ -124,14 +152,12 @@ function New_Challenges() {
             </label>
             <div className="relative">
               <input
-                type="time"
-                id="end-time"
-                value={endTime}
-                onChange={handleEndTimeChange}
+                type="datetime-local"
+                id="endDate"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleInputChange}
                 className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                min={startTime}
-                max="18:00"
-                required
               />
             </div>
           </div>
@@ -146,21 +172,24 @@ function New_Challenges() {
         </div>
         <div className="flex gap-10 mt-10">
           <select
-            id="skill-level"
-            value={selectedLevel}
-            onChange={handleSelectChange}
+            id="level"
+            name="level"
+            value={formData.level}
+            onChange={handleInputChange}
             className="block appearance-none text-lg text-semibold w-[100%] bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           >
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Expert">Expert</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
           </select>
           <input
             type="url"
-            id="website"
+            id="streamLink"
+            name="streamLink"
+            value={formData.streamLink}
+            onChange={handleInputChange}
             class="bg-gray-50 border border-gray-300 text-gray-900 text-lg text-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Enter Streaming link"
-            required
           />
         </div>
         <div className="mt-10 ">
@@ -170,16 +199,22 @@ function New_Challenges() {
             </h1>
           </label>
           <textarea
-            id="message"
+            id="description"
+            name="description"
             rows="4"
+            value={formData.description}
+            onChange={handleInputChange}
             class="block  mt-3 p-2.5 w-full text-lg font-semibold text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="You must be an intermediate level on call of duty and ready to take defeat becase i am going to unleash you!"
           ></textarea>
         </div>
 
         <div className="mt-5 flex justify-end">
-          <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-            Post Challenge
+          <button
+            onClick={handleSubmit}
+            className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+          >
+            {loading ? "Posting Challenge" : "Post Challenge"}
           </button>
         </div>
       </div>

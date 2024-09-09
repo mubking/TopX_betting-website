@@ -1,5 +1,5 @@
 import React from 'react'
-import TrendingBets from '@/components/dashboard/TrendingBets'
+import TrendingBets from '../../components/dashboard/TrendingBets'
 function page() {
   return (
     <div>
