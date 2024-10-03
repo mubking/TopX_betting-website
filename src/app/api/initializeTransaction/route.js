@@ -22,12 +22,12 @@ export async function POST(request) {
         },
         body: JSON.stringify({
           email,
-          amount: (amount * 100).toString(), // Convert to kobo
-          callback_url: "http://localhost:3000/dashboard",
+          amount: (amount * 100).toString(), 
+          callback_url: `${process.env.APPURL}`,
         }),
       }
     );
-
+    //
     if (!response.ok) {
       const errorData = await response.json();
       return NextResponse.json(

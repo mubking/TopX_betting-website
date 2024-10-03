@@ -31,9 +31,17 @@ export async function GET() {
       balance: totalDeposits._sum.amount || 0,
     });
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "Could not get balance",
-    });
+    if (error instanceof PrismaClientInitializationError) {
+      return NextResponse.json(
+        { message: "Please check your internet connection" },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      {
+        message: "Could not get balance",
+      },
+      { status: 500 }
+    );
   }
 }

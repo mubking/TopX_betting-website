@@ -32,6 +32,7 @@ function Dashboard() {
   }, []);
 
   const fetchBalance = async () => {
+    console.log("yeah it is fetchBalance")
     setLoading(true);
     try {
       const response = await axios.get("/api/getUserBalance");
@@ -52,6 +53,7 @@ function Dashboard() {
   };
 
   const verifyBalance = async () => {
+    console.log("yeah it is verifyBalance")
     setLoading(true);
     try {
       const response = await axios.post(
@@ -87,6 +89,8 @@ function Dashboard() {
   useEffect(() => {
     reference && verifyBalance();
   }, [reference]);
+
+
   useEffect(() => {
     !reference && fetchBalance();
   }, [reference]);
@@ -100,8 +104,6 @@ function Dashboard() {
       const response = await fetch("/api/challenge");
       const result = await response.json();
       const { data, message } = result;
-
-      console.log(data);
 
       if (response.ok) {
         setInfo({
