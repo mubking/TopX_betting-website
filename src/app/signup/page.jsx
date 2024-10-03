@@ -1,9 +1,7 @@
 import React from 'react'
-import Signup from '../../Components/Signup'
-// import { getServerSession } from 'next-auth'
-// import { authOptions } from '../../lib/auth'
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/auth';
+import Signup from "../../components/Signup"
 
 const page = async () => {
     const session = await getServerSession(authOptions);
