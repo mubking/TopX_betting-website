@@ -27,12 +27,12 @@ interface SessionUser {
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
-  secret: process.env.NEXTAUTH_SECRET, // Ensure this is set in your .env file
+  secret: process.env.NEXTAUTH_SECRET, 
   session: {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/login", // Your custom sign-in page
+    signIn: "/login", 
   },
   providers: [
     CredentialsProvider({
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         console.log(credentials)
         if (!credentials?.username || !credentials?.password) {
           console.error("Username and password are required");
-          return null; // Return null if validation fails
+          return null;
         }
 
         const user = await db.user.findUnique({
