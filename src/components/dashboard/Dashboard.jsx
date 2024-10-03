@@ -7,7 +7,7 @@ import { FaEye } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { _yY } from "../../lib/_hjs";
-import { formatLargestTimeUnit } from "../../lib/date";
+import { formatLargestTimeUnit } from "../../lib/date.js";
 import ChallengePopUp from "./ChallengePopUp";
 
 function Dashboard() {
@@ -232,9 +232,13 @@ function Dashboard() {
                           <h2 className="text-blue-500 capitalize">
                             {d.user.username}
                           </h2>
-                          <span className=" opacity-70">
-                            {formatLargestTimeUnit(d.createdAt)}
-                          </span>
+                          {d.createdAt && (
+                            <span className=" opacity-70">
+                              {formatLargestTimeUnit(
+                                d.createdAt && d.createdAt
+                              )}
+                            </span>
+                          )}
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">
                           {d.title}
@@ -270,7 +274,12 @@ function Dashboard() {
                   </div>
                 </div>
               </div>
-              {selectedChallenge === d.id && <ChallengePopUp setSelectedChallenge={setSelectedChallenge} data={d} />}
+              {selectedChallenge === d.id && (
+                <ChallengePopUp
+                  setSelectedChallenge={setSelectedChallenge}
+                  data={d}
+                />
+              )}
             </>
           ))
         )}
